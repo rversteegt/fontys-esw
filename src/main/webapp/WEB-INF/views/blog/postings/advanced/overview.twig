@@ -1,0 +1,11 @@
+{% extends 'blog/postings/overview.twig' %}
+
+{% block body %}
+    {% block extra %}
+        <p>
+            <a href="/app/blog/delete/{{ id }}">Verwijder</a>
+        </p>
+    {% endblock %}
+    
+{% endblock %}
+

@@ -19,7 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author Robert
  */
 @Configuration
-@ComponentScan(basePackages = {"sb.fontys.esw.controllers"})
+@ComponentScan(basePackages = {"sb.fontys.esw.blog.controllers"})
 
 @EnableWebMvc
 public class MvcConfig extends WebMvcConfigurerAdapter {

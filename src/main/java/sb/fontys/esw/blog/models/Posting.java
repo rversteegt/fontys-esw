@@ -1,26 +1,34 @@
 package sb.fontys.esw.blog.models;
 
+import com.google.common.collect.ImmutableList;
 import java.util.List;
 
 /**
  *
  * @author Robert
  */
-public class Posting {
-    private final String posting;
+public class Posting {    
+    private final String message;
     
-    private final List<String> comments;
+    private final String title;
+    
+    private final ImmutableList<String> comments;
 
-    public Posting(String posting, List<String> comments) {
-        this.posting = posting;
-        this.comments = comments;
+    public Posting(String message, String title, List<String> comments) {
+        this.title = title;
+        this.message = message;
+        this.comments = ImmutableList.copyOf(comments);
     }
 
-    public String getPosting() {
-        return posting;
+    public String getMessage() {
+        return message;
     }
-
-    public List<String> getComments() {
+    
+    public String getTitle() {
+        return title;
+    }
+    
+    public ImmutableList<String> getComments() {
         return comments;
     }
 }

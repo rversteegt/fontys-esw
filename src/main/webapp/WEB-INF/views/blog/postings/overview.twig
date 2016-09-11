@@ -11,11 +11,38 @@
         </h1>
         
         <p>
-            {{ posting.title }}
+            {{ posting.message }}
         </p>
         
     {% else %}
-        Geen berichtjes gevonden jonguh!
+        Geen blogjes gevonden jonguh!
     {% endfor %}
+    
+    <h2>
+        Voeg blogje toe:
+    </h2>
+    
+    <form action="/app/blog/add" method="post">
+        <table>
+            <tr>
+                <td>
+                    Titel
+                </td>                
+                <td>
+                    <input type="text" name="title"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Bericht
+                </td>                
+                <td>
+                    <textarea name="message"></textarea>
+                </td>
+            </tr>
+        </table>
+        
+        <input type="submit" value="stuur op"/>
+    </form>
     
 {% endblock %}

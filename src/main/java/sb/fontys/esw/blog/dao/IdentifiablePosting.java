@@ -1,4 +1,4 @@
-package sb.fontys.esw.blog.dbal.models;
+package sb.fontys.esw.blog.dao;
 
 import sb.fontys.esw.blog.models.Posting;
 
@@ -6,12 +6,12 @@ import sb.fontys.esw.blog.models.Posting;
  *
  * @author Robert
  */
-public class IdentifiablePosting {
-    private final Posting posting;
-    
+public class IdentifiablePosting {    
     private final int id;
+    
+    private final Posting posting;
 
-    public IdentifiablePosting(Posting posting, int id) {
+    IdentifiablePosting(int id, Posting posting) {
         this.posting = posting;
         this.id = id;
     }
