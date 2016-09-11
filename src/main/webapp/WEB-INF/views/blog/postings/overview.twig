@@ -1,0 +1,21 @@
+{% extends 'blog/main.twig' %}
+
+{% block body %}
+    <h1>
+        Dit is mooie blok
+    </h1>
+    
+    {% for posting in postings %}
+        <h1>
+            {{ posting.title }}
+        </h1>
+        
+        <p>
+            {{ posting.title }}
+        </p>
+        
+    {% else %}
+        Geen berichtjes gevonden jonguh!
+    {% endfor %}
+    
+{% endblock %}
