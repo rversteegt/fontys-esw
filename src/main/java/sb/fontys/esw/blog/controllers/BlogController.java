@@ -32,13 +32,53 @@ public class BlogController {
         return mav;
     }
     
-    @RequestMapping(method = RequestMethod.GET)
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ModelAndView showDetail(
+        @PathVariable("id") String id,
+        HttpServletRequest request
+    ) {
+        try {
+            Optional<IdentifiablePosting> posting = 
+                    InMemoryPostingService.byId(Integer.parseInt(id));
+            
+            if (posting.isPresent()) {
+                ModelAndView mav = new ModelAndView("blog/postings/detail.twig");
+                
+                mav.addObject("posting", posting.get().getPosting());
+                mav.addObject("id", posting.get().getId());
+                
+                return mav;
+            } else {
+                return new ModelAndView("redirect:/404");
+            }
+        } catch (NumberFormatException e) {
+            return new ModelAndView("redirect:/404");
+        }
+    }
+    
+    @RequestMapping(value = "/advanced", method = RequestMethod.GET)
     public ModelAndView showOverviewAdvanced(HttpServletRequest request) {
         ModelAndView mav = showOverview(request);
         
         mav.setViewName("blog/postings/advanced/overview.twig");
                 
         return mav;
+    }
+    
+    @RequestMapping(value = "/advanced/{id}", method = RequestMethod.GET)
+    public ModelAndView showDetailAdvanced(
+        @PathVariable("id") String id,
+        HttpServletRequest request
+    ) {
+        ModelAndView mav = showDetail(id, request);
+        
+        if (mav.getViewName().startsWith("redirect")) {
+            return mav;
+        } else {
+            mav.setViewName("blog/postings/advanced/detail.twig");
+            
+            return mav;
+        }
     }
     
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -137,30 +177,6 @@ public class BlogController {
         } catch (NumberFormatException e) {
             return new ModelAndView("redirect:/505");
         }
-    }    
-    
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public ModelAndView showDetail(
-        @PathVariable("id") String id,
-        HttpServletRequest request
-    ) {
-        try {
-            Optional<IdentifiablePosting> posting = 
-                    InMemoryPostingService.byId(Integer.parseInt(id));
-            
-            if (posting.isPresent()) {
-                ModelAndView mav = new ModelAndView("blog/postings/detail.twig");
-                
-                mav.addObject("posting", posting.get().getPosting());
-                mav.addObject("id", posting.get().getId());
-                
-                return mav;
-            } else {
-                return new ModelAndView("redirect:/404");
-            }
-        } catch (NumberFormatException e) {
-            return new ModelAndView("redirect:/404");
-        }
-    }
+    }  
 }    
     

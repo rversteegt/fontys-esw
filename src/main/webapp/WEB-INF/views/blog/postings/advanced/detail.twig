@@ -1,10 +1,9 @@
-{% extends 'blog/main.twig' %}
+{% extends 'blog/postings/detail.twig' %}
 
-{% block body %}
-            
+{% block content %}
     {% block advanced %}
-        <a href="/app/blog/advanced/{{ id }}">
-            Geavanceerd
+        <a href="/app/blog/{{ id }}">
+            Simpel
         </a>
     {% endblock %}
     
@@ -44,6 +43,5 @@
         </table>
         
         <input type="submit" value="stuur op"/>
-    </form>            
-    
+    </form>
 {% endblock %}
