@@ -12,9 +12,9 @@ public class Posting {
     
     private final String title;
     
-    private final ImmutableList<String> comments;
+    private final ImmutableList<Comment> comments;
 
-    public Posting(String message, String title, List<String> comments) {
+    public Posting(String message, String title, List<Comment> comments) {
         this.title = title;
         this.message = message;
         this.comments = ImmutableList.copyOf(comments);
@@ -28,7 +28,7 @@ public class Posting {
         return title;
     }
     
-    public ImmutableList<String> getComments() {
+    public ImmutableList<Comment> getComments() {
         return comments;
     }
 }

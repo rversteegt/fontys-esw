@@ -5,13 +5,13 @@
  */
 package sb.fontys.esw.blog.dao;
 
-import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import sb.fontys.esw.blog.models.Comment;
 import sb.fontys.esw.blog.models.Posting;
 
 /**
@@ -20,51 +20,72 @@ import sb.fontys.esw.blog.models.Posting;
  */
 public class InMemoryPostingService implements PostingService {
     
-    private static final Map<Integer, Posting> POSTINGS = new HashMap<>();
+    protected final Map<Integer, Posting> postings;
     
-    public static IdentifiablePosting addPosting(Posting posting) {
-        int nextId = POSTINGS.
+    private static final InMemoryPostingService INSTANCE =
+            new InMemoryPostingService();
+
+    private InMemoryPostingService() {
+        postings = new HashMap<>();
+    }
+    
+    protected InMemoryPostingService(Map<Integer, Posting> postings) {
+        this.postings = postings;
+    }
+    
+    public static InMemoryPostingService getInstance() {
+        return INSTANCE;
+    }
+        
+    @Override
+    public IdentifiablePosting addPosting(Posting posting) {
+        int nextId = postings.
                 keySet().
                 stream().
                 reduce(0, (a, b) -> 
                         ( a >= b ? a : b ) + 1);
         
-        POSTINGS.put(nextId, posting);
+        postings.put(nextId, posting);
         
         return new IdentifiablePosting(nextId, posting);
     }
     
-    public static IdentifiablePosting editPosting(
-            IdentifiablePosting oldPosting, Posting newPosting) {
-        
-        POSTINGS.put(oldPosting.getId(), newPosting);
+    @Override
+    public IdentifiablePosting editPosting(
+            IdentifiablePosting oldPosting,
+            Posting newPosting
+    ) {       
+        postings.put(oldPosting.getId(), newPosting);
         
         return new IdentifiablePosting(oldPosting.getId(), newPosting);
     }
     
-    public static void deletePosting(IdentifiablePosting posting) {
-        POSTINGS.remove(posting.getId());
+    @Override
+    public void deletePosting(IdentifiablePosting posting) {
+        postings.remove(posting.getId());
     }
     
-    public static IdentifiablePosting addCommentToPosting(
+    @Override
+    public IdentifiablePosting addCommentToPosting(
             IdentifiablePosting idPosting,
-            String message
+            Comment comment
     ) {
         Posting posting = idPosting.getPosting();
-        List<String> newComments = new ArrayList<>(posting.getComments());
+        List<Comment> newComments = new ArrayList<>(posting.getComments());
         
-        newComments.add(message);
+        newComments.add(comment);
         
         Posting newPosting = new Posting(
                 posting.getMessage(), posting.getMessage(), newComments);
         
-        POSTINGS.put(idPosting.getId(), newPosting);
+        postings.put(idPosting.getId(), newPosting);
         
         return new IdentifiablePosting(idPosting.getId(), newPosting);
     }
     
-    public static List<IdentifiablePosting> all() {
-        return POSTINGS.
+    @Override
+    public List<IdentifiablePosting> all() {
+        return postings.
                 entrySet().
                 stream().
                 map(entry -> 
@@ -76,9 +97,10 @@ public class InMemoryPostingService implements PostingService {
                 collect(Collectors.toList());
     }
     
-    public static Optional<IdentifiablePosting> byId(int id) {
-        if (POSTINGS.containsKey(id)) {
-            return Optional.of(new IdentifiablePosting(id, POSTINGS.get(id)));
+    @Override
+    public Optional<IdentifiablePosting> byId(int id) {
+        if (postings.containsKey(id)) {
+            return Optional.of(new IdentifiablePosting(id, postings.get(id)));
         } else {
             return Optional.empty();
         }

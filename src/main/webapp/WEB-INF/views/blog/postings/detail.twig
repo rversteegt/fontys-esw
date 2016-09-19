@@ -1,28 +1,49 @@
 {% extends 'blog/main.twig' %}
 
-{% block body %}
-            
-    {% block advanced %}
-        <a href="/app/blog/advanced/{{ id }}">
-            Geavanceerd
-        </a>
-    {% endblock %}
-    
-     <h1>
-        {{ posting.title }}
-    </h1>
+{% block body %}     
+    {% if options.getVisibility.toString == "ADVANCED" %}
+        <form action="/app/blog/edit/{{ id }}" method="post">
+            <table>
+                <tr>
+                    <td>
+                        Titel
+                    </td>                
+                    <td>
+                        <input type="text" name="title" value="{{ posting.title }}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Bericht
+                    </td>                
+                    <td>
+                        <textarea name="message">
+                            {{ posting.message }}
+                        </textarea>
+                    </td>
+                </tr>
+            </table>
+        </form>   
+    {% else %}
+        <h1>
+            {{ posting.title }}
+        </h1>
 
-    <p>
-        {{ posting.message }}
-    </p>
+        <p>
+            {{ posting.message }}
+        </p>        
+    {% endif %}
     
     <h2>
         Reageersels
     </h2>
     
     {% for comment in posting.comments %}
+        <i>
+            {{ comment.getTimestamp|date("dd-MM-yyyy") }}
+        </i>
         <p>
-            {{ comment }}
+            {{ comment.getMessage }}
         </p>
     {% else %}
         <p>
@@ -44,6 +65,12 @@
         </table>
         
         <input type="submit" value="stuur op"/>
-    </form>            
+    </form>
+
+    {% if options.getVisibility.toString == "ADVANCED" %}
+        <p>
+            <a href="/app/blog/delete/{{ id }}">Verwijder</a>
+        </p>   
+    {% endif %}
     
 {% endblock %}

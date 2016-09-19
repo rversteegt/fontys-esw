@@ -2,7 +2,7 @@ package sb.fontys.esw.blog.dao;
 
 import java.util.List;
 import java.util.Optional;
-import sb.fontys.esw.blog.dao.IdentifiablePosting;
+import sb.fontys.esw.blog.models.Comment;
 import sb.fontys.esw.blog.models.Posting;
 
 /**
@@ -11,22 +11,21 @@ import sb.fontys.esw.blog.models.Posting;
  */
 public interface PostingService {
     
-    public static IdentifiablePosting addPosting(Posting posting) {
-        throw new UnsupportedOperationException();
-    }
+    public IdentifiablePosting addPosting(Posting posting);
     
-    public static IdentifiablePosting addResponseToPosting(
-            IdentifiablePosting posting,
-            String message
-    ) {
-        throw new UnsupportedOperationException();
-    }
+    public List<IdentifiablePosting> all();
     
-    public static List<IdentifiablePosting> all() {
-        throw new UnsupportedOperationException();
-    }
+    public Optional<IdentifiablePosting> byId(int id);
     
-    public static Optional<IdentifiablePosting> byId(int id) {
-        throw new UnsupportedOperationException();
-    }
+    public IdentifiablePosting editPosting(
+            IdentifiablePosting oldPosting,
+            Posting newPosting
+    );
+    
+    public void deletePosting(IdentifiablePosting posting);
+    
+    public IdentifiablePosting addCommentToPosting(
+            IdentifiablePosting idPosting,
+            Comment comment
+    );
 }
