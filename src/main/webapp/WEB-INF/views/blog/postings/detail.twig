@@ -17,17 +17,20 @@
                         Bericht
                     </td>                
                     <td>
-                        <textarea name="message">
-                            {{ posting.getPosting.message }}
-                        </textarea>
+                        <textarea name="message">{{ posting.getPosting.message }}</textarea>
                     </td>
                 </tr>
             </table>
+            <input class="btn btn-primary" type="submit" value="verander"/>
         </form>   
     {% else %}
         <h1>
             {{ posting.getPosting.title }}
         </h1>
+
+        <span>
+            {{ posting.getPosting.getTimestamp|date("dd-MM-yyyy") }}
+        </span>
 
         <p>
             {{ posting.getPosting.message }}
@@ -35,7 +38,7 @@
     {% endif %}
     
     <h2>
-        Reageersels
+        Reacties
     </h2>
 
     <div id="responses">
@@ -55,56 +58,11 @@
     </div>
     
     <form id="addComment" action="/app/blog/addCommentToPosting/{{ posting.getId }}" method="post">
-        <table>           
-            <tr>
-                <td>
-                    Reageer
-                </td>                
-                <td>
-                    <textarea name="message"></textarea>
-                </td>
-            </tr>
-        </table>
-        
-        <input type="submit" value="stuur op"/>
+        Reageer <br/>
+        <textarea class="form-control" name="message"></textarea>
+        <input type="hidden" name="id" value="{{ posting.getId }}"/>
+        <input class="btn btn-primary" type="submit" value="stuur op"/>
     </form>
-
-        <script>
-            $(function() {
-                $("#addComment").submit(function(e){
-                    e.preventDefault();
-
-                    var $message = $(this).find("textarea[name='message']");
-                    var $responses = $("#responses");
-
-                    $.ajax(
-                        {
-                            url : '/app/api/blog/addCommentToPosting/{{ id }}',
-                            method : 'POST',
-                            data : {
-                                message : $message.val()
-                            },
-                            error : function(error) {
-                            },
-                            success : function(response) {
-                                var comments = response.posting.comments;
-
-                                $responses.html('');
-                                $message.val('');
-
-                                $.each(comments, function(k, comment) {
-                                    $responses.append('<i>' + moment(comment.timestamp).format('D-M-YYYY') + '</i><p>' + comment.message + '</p>');
-                                });
-
-                            },
-                            complete : function() {
-                            },
-                        }
-                    );
-                });
-            });
-
-        </script>
 
     {% if options.getVisibility.toString == "ADVANCED" %}
         <form action="/app/blog/delete/{{ posting.getId }}" method="post">

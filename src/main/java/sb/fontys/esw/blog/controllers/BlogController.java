@@ -52,7 +52,7 @@ public class BlogController {
             if (posting.isPresent()) {
                 ModelAndView mav = ControllerSettings.getMavWithOptions(
                         request.getSession(), "blog/postings/detail.twig");
-                
+
                 mav.addObject("posting", posting.get());
                 
                 return mav;
@@ -77,7 +77,7 @@ public class BlogController {
             return new ModelAndView("redirect:/505");
         } else {
             Posting newPosting = new Posting(
-                    message.get(), title.get(), new ArrayList());
+                    message.get(), title.get(), new Date(), new ArrayList());
 
             IdentifiablePosting idPosting =
                     ControllerSettings.getPostingService(
@@ -107,8 +107,12 @@ public class BlogController {
                 !idPosting.isPresent()) {
             return new ModelAndView("redirect:/505");
         } else {
-            Posting newPosting = new Posting(message.get(), title.get(), 
-                    idPosting.get().getPosting().getComments());
+            Posting newPosting = new Posting(
+                message.get(),
+                title.get(),
+                idPosting.get().getPosting().getTimestamp(),
+                idPosting.get().getPosting().getComments()
+            );
             
             IdentifiablePosting newIdPosting =
                     ControllerSettings.getPostingService(request.getSession()).

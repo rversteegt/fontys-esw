@@ -3,17 +3,25 @@
 {% block body %}
     
     <h1>
-        Dit is mooie blok
+        Dit is mooie blog
     </h1>
     
     {% for posting in postings %}
         <h1>
             {{ posting.getPosting.title }}
         </h1>
+
+        <span>
+            {{ posting.getPosting.getTimestamp|date("dd-MM-yyyy") }}
+        </span>
         
         <p>
             {{ posting.getPosting.message }}
         </p>
+
+        <a href="/app/blog/{{ posting.getId }}">
+            Bekijk reacties
+        </a>
         
     {% else %}
         Geen blogjes gevonden jonguh!
@@ -38,12 +46,12 @@
                     Bericht
                 </td>                
                 <td>
-                    <textarea name="message"></textarea>
+                    <textarea class="form-control" name="message"></textarea>
                 </td>
             </tr>
         </table>
         
-        <input type="submit" value="stuur op"/>
+        <input class="btn btn-primary" type="submit" value="stuur op"/>
     </form>
     
 {% endblock %}

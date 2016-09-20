@@ -71,7 +71,11 @@ public class InMemoryPostingService implements PostingService {
         newComments.add(comment);
         
         Posting newPosting = new Posting(
-                posting.getMessage(), posting.getMessage(), newComments);
+            posting.getMessage(),
+            posting.getMessage(),
+            posting.getTimestamp(),
+            newComments
+        );
         
         postings.put(idPosting.getId(), newPosting);
         
