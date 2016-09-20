@@ -8,11 +8,11 @@
     
     {% for posting in postings %}
         <h1>
-            {{ posting.title }}
+            {{ posting.getPosting.title }}
         </h1>
         
         <p>
-            {{ posting.message }}
+            {{ posting.getPosting.message }}
         </p>
         
     {% else %}

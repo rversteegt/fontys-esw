@@ -5,7 +5,6 @@ import com.mitchellbosecke.pebble.loader.Loader;
 import com.mitchellbosecke.pebble.loader.ServletLoader;
 import com.mitchellbosecke.pebble.spring.PebbleViewResolver;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -20,8 +19,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  * @author Robert
  */
 @Configuration
-@ComponentScan(basePackages = {"sb.fontys.esw.blog.controllers"})
-
+@ComponentScan(basePackages = {
+    "sb.fontys.esw.blog.controllers",
+    "sb.fontys.esw.blog.controllers.ws"
+})
 @EnableWebMvc
 public class MvcConfig extends WebMvcConfigurerAdapter {
 

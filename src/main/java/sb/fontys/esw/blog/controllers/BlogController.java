@@ -33,7 +33,7 @@ public class BlogController {
         List<IdentifiablePosting> postings = 
                 ControllerSettings.getPostingService(
                         request.getSession()).all();
-        
+
         mav.addObject("postings", postings);
                 
         return mav;
@@ -53,8 +53,7 @@ public class BlogController {
                 ModelAndView mav = ControllerSettings.getMavWithOptions(
                         request.getSession(), "blog/postings/detail.twig");
                 
-                mav.addObject("posting", posting.get().getPosting());
-                mav.addObject("id", posting.get().getId());
+                mav.addObject("posting", posting.get());
                 
                 return mav;
             } else {
@@ -141,8 +140,8 @@ public class BlogController {
     }    
     
     @RequestMapping(
-            value = "/addMessageToPosting/{id}", method = RequestMethod.POST)
-    public ModelAndView addMessageToPosting(
+            value = "/addCommentToPosting/{id}", method = RequestMethod.POST)
+    public ModelAndView addCommentToPosting(
             @PathVariable("id") String id,
             @RequestParam(value="message", required=false) String iMessage,
             HttpServletRequest request

@@ -2,14 +2,14 @@
 
 {% block body %}     
     {% if options.getVisibility.toString == "ADVANCED" %}
-        <form action="/app/blog/edit/{{ id }}" method="post">
+        <form action="/app/blog/edit/{{ posting.getId }}" method="post">
             <table>
                 <tr>
                     <td>
                         Titel
                     </td>                
                     <td>
-                        <input type="text" name="title" value="{{ posting.title }}"/>
+                        <input type="text" name="title" value="{{ posting.getPosting.title }}"/>
                     </td>
                 </tr>
                 <tr>
@@ -18,7 +18,7 @@
                     </td>                
                     <td>
                         <textarea name="message">
-                            {{ posting.message }}
+                            {{ posting.getPosting.message }}
                         </textarea>
                     </td>
                 </tr>
@@ -26,33 +26,35 @@
         </form>   
     {% else %}
         <h1>
-            {{ posting.title }}
+            {{ posting.getPosting.title }}
         </h1>
 
         <p>
-            {{ posting.message }}
+            {{ posting.getPosting.message }}
         </p>        
     {% endif %}
     
     <h2>
         Reageersels
     </h2>
+
+    <div id="responses">
+        {% for comment in posting.getPosting.comments %}
+            <i>
+                {{ comment.getTimestamp|date("dd-MM-yyyy") }}
+            </i>
+            <p>
+                {{ comment.getMessage }}
+            </p>
+        {% else %}
+            <p>
+                Nog niemand heeft gereageerd.
+                Schande.
+            </p>
+        {% endfor %}
+    </div>
     
-    {% for comment in posting.comments %}
-        <i>
-            {{ comment.getTimestamp|date("dd-MM-yyyy") }}
-        </i>
-        <p>
-            {{ comment.getMessage }}
-        </p>
-    {% else %}
-        <p>
-            Nog niemand heeft gereageerd.
-            Schande.
-        </p>
-    {% endfor %}
-    
-    <form action="/app/blog/addMessageToPosting/{{ id }}" method="post">
+    <form id="addComment" action="/app/blog/addCommentToPosting/{{ posting.getId }}" method="post">
         <table>           
             <tr>
                 <td>
@@ -67,10 +69,47 @@
         <input type="submit" value="stuur op"/>
     </form>
 
+        <script>
+            $(function() {
+                $("#addComment").submit(function(e){
+                    e.preventDefault();
+
+                    var $message = $(this).find("textarea[name='message']");
+                    var $responses = $("#responses");
+
+                    $.ajax(
+                        {
+                            url : '/app/api/blog/addCommentToPosting/{{ id }}',
+                            method : 'POST',
+                            data : {
+                                message : $message.val()
+                            },
+                            error : function(error) {
+                            },
+                            success : function(response) {
+                                var comments = response.posting.comments;
+
+                                $responses.html('');
+                                $message.val('');
+
+                                $.each(comments, function(k, comment) {
+                                    $responses.append('<i>' + moment(comment.timestamp).format('D-M-YYYY') + '</i><p>' + comment.message + '</p>');
+                                });
+
+                            },
+                            complete : function() {
+                            },
+                        }
+                    );
+                });
+            });
+
+        </script>
+
     {% if options.getVisibility.toString == "ADVANCED" %}
-        <p>
-            <a href="/app/blog/delete/{{ id }}">Verwijder</a>
-        </p>   
+        <form action="/app/blog/delete/{{ posting.getId }}" method="post">
+            <input type="submit" value="Verwijder"/>
+        </form>
     {% endif %}
     
 {% endblock %}
