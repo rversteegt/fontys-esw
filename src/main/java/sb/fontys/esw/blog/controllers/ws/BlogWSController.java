@@ -31,7 +31,7 @@ public class BlogWSController {
             @RequestParam(value="message", required=false) String iMessage,
             HttpServletRequest request
     ) {
-        try {System.out.println(id);System.out.println(iMessage);
+        try {
             Optional<String> message = Optional.ofNullable(iMessage);
 
             Optional<IdentifiablePosting> idPosting =

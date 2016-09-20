@@ -66,7 +66,7 @@
 
     {% if options.getVisibility.toString == "ADVANCED" %}
         <form action="/app/blog/delete/{{ posting.getId }}" method="post">
-            <input type="submit" value="Verwijder"/>
+            <input class="btn btn-primary" type="submit" value="Verwijder"/>
         </form>
     {% endif %}
     
